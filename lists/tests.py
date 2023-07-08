@@ -51,5 +51,21 @@ class HomePageTestCase(TestCase):
         response: HttpResponse = self.client.post(
             "/", data={"todo_input_text": "First Item"}
         )
-        self.assertIn("First Item", response.content.decode("utf-8"))
-        self.assertTemplateUsed(response, "home.html")
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "First Item")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/")
+
+    def test_not_saving_empty_item(self):
+        self.client.post("/")
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_display_all_items(self):
+        Item.objects.create(text="First fake item")
+        Item.objects.create(text="Second fake item")
+        response: HttpResponse = self.client.get("/")
+
+        self.assertIn("First fake item", response.content.decode("utf-8"))
+        self.assertIn("Second fake item", response.content.decode("utf"))
