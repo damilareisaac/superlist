@@ -18,6 +18,10 @@ class HomePageTestCase(TestCase):
         request = HttpRequest()
         response: HttpResponse = home_page(request)
         html: str = response.content.decode("utf-8")
-        self.assertTrue(html.startswith("<html>"))
+        self.assertTrue(html.strip().startswith("<html>"))
         self.assertIn("<title>To-Do lists</title>", html)
-        self.assertTrue(html.endswith("</html>"))
+        self.assertTrue(html.strip().endswith("</html>"))
+
+    def test_home_page_returns_correct_html_using_client(self):
+        response: HttpResponse = self.client.get("/")
+        self.assertTemplateUsed(response, "home.html")
