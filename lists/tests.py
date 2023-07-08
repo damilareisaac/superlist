@@ -3,6 +3,27 @@ from django.test import TestCase
 from django.urls import ResolverMatch, resolve
 from lists.views import home_page
 
+from lists.models import Item
+
+
+class ItemModelTestCase(TestCase):
+    def test_saving_and_retrieving_items(self):
+        first_item = Item()
+        first_item.text = "First dummy item"
+        first_item.save()
+        second_item = Item()
+        second_item.text = "Second dummy item"
+        second_item.save()
+
+        items = Item.objects.all()
+
+        first_item = items[0]
+        second_item = items[1]
+
+        self.assertEqual(first_item.text, "First dummy item")
+        self.assertEqual(second_item.text, "Second dummy item")
+        self.assertEqual(items.count(), 2)
+
 
 class SmokeTestCase(TestCase):
     def test_bad_maths(self) -> None:
