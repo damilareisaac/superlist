@@ -3,4 +3,9 @@ from django.shortcuts import render
 
 
 def home_page(request):
-    return render(request, "home.html")
+    context: dict = {"to_do_item": request.POST.get("todo_input_text", "")}
+    return render(
+        request,
+        "home.html",
+        context,
+    )

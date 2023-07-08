@@ -19,9 +19,16 @@ class HomePageTestCase(TestCase):
         response: HttpResponse = home_page(request)
         html: str = response.content.decode("utf-8")
         self.assertTrue(html.strip().startswith("<html>"))
-        self.assertIn("<title>To-Do lists</title>", html)
+        self.assertIn("<title>To-Do</title>", html)
         self.assertTrue(html.strip().endswith("</html>"))
 
-    def test_home_page_returns_correct_html_using_client(self):
+    def test_uses_home_template_using_client(self):
         response: HttpResponse = self.client.get("/")
+        self.assertTemplateUsed(response, "home.html")
+
+    def test_can_save_a_post_request(self):
+        response: HttpResponse = self.client.post(
+            "/", data={"todo_input_text": "First Item"}
+        )
+        self.assertIn("First Item", response.content.decode("utf-8"))
         self.assertTemplateUsed(response, "home.html")
