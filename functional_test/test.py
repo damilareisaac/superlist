@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 MAX_WAIT = 5
 
 
-class NewVisitorTest(LiveServerTestCase):
+class CustomLiveServerTestCase(LiveServerTestCase):
     def setUp(self) -> None:
         self.browser: webdriver.Firefox = webdriver.Firefox()
 
@@ -32,12 +32,33 @@ class NewVisitorTest(LiveServerTestCase):
                 time.sleep(0.5)
 
     def send_to_do_item(self, item_text):
-        to_do_input_box = self.browser.find_element(By.ID, "todo_input_text")
+        to_do_input_box = self.browser.find_element(
+            By.ID,
+            "todo_input_text",
+        )
         to_do_input_box.send_keys(item_text)
 
         # When she hits enter, the page updates, and now the page lists
         to_do_input_box.send_keys(Keys.ENTER)
 
+
+class SmokeTestCase(CustomLiveServerTestCase):
+    def test_layout_and_styling(self):
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        self.send_to_do_item("testing")
+        self.wait_for_low_in_list_table("1. testing")
+
+        inputbox = self.browser.find_element(By.ID, "todo_input_text")
+        self.assertAlmostEqual(
+            inputbox.location["x"] + inputbox.size["width"] / 2,
+            512,
+            delta=10,
+        )
+
+
+class TestFunctionalityTestCase(CustomLiveServerTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app. She goes
         #   to check out its homepage
@@ -48,13 +69,10 @@ class NewVisitorTest(LiveServerTestCase):
 
         # she notices the page title and header mentioned to-do lists
         header_text: str = self.browser.find_element(By.TAG_NAME, "h1").text
-        self.assertIn("To-Do", header_text)
+        self.assertIn("Start a To-Do list", header_text)
 
         # She is invited to enter a to-do item straight away
-        to_do_input_box = self.browser.find_element(
-            By.ID,
-            "todo_input_text",
-        )
+        to_do_input_box = self.browser.find_element(By.ID, "todo_input_text")
         self.assertEqual(
             to_do_input_box.get_attribute("placeholder"), "Enter a to-do item"
         )
