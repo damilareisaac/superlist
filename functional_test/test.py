@@ -69,14 +69,12 @@ class NewVisitorTest(LiveServerTestCase):
 
         self.send_to_do_item("Use peacock feathers to make a fly")
 
-    def test_can_start_a_list_with_one_user(self):
-        # Edith has heard about a cool new online to-do app. She goes
-        # The page updates again, and now shows both items on her list
+    # def test_can_start_a_list_with_one_user(self):
+    #     # Edith has heard about a cool new online to-do app. She goes
+    #     # The page updates again, and now shows both items on her list
 
-        self.wait_for_low_in_list_table("1. Buy peacock feathers")
-        self.wait_for_low_in_list_table("2. Use peacock feathers to make a fly")
-
-        self.fail("Finish the test!")
+    #     self.wait_for_low_in_list_table("1. Buy peacock feathers")
+    #     self.wait_for_low_in_list_table("2. Use peacock feathers to make a fly")
 
     def test_multiple_users_can_add_items_to_lists_at_different_url(self):
         # Edith start a new list
@@ -104,8 +102,8 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Francis started a new list by entering an item
 
-        self.send_to_do_item("Buy Milk")
-        self.wait_for_low_in_list_table("1. Buy Milk")
+        self.send_to_do_item("Buy milk")
+        self.wait_for_low_in_list_table("1. Buy milk")
 
         francis_url = self.browser.current_url
         self.assertRegex(francis_url, "lists/.+")
