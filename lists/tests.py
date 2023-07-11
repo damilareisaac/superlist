@@ -51,8 +51,8 @@ class HomePageTestCase(TestCase):
         request = HttpRequest()
         response: HttpResponse = home_page(request)
         html: str = response.content.decode("utf-8")
-        self.assertTrue(html.strip().startswith("<html>"))
-        self.assertIn("<title>To-Do</title>", html)
+        self.assertTrue(html.strip().startswith("<!Doctype>"))
+        self.assertIn("<title>To-Do lists</title>", html)
         self.assertTrue(html.strip().endswith("</html>"))
 
     def test_uses_home_template_using_client(self):

@@ -1,5 +1,7 @@
 import time
-from django.test import LiveServerTestCase
+
+# from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
@@ -8,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 MAX_WAIT = 5
 
 
-class CustomLiveServerTestCase(LiveServerTestCase):
+class CustomLiveServerTestCase(StaticLiveServerTestCase):
     def setUp(self) -> None:
         self.browser: webdriver.Firefox = webdriver.Firefox()
 
@@ -65,7 +67,7 @@ class TestFunctionalityTestCase(CustomLiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention to-do lists
-        self.assertIn("To-Do", self.browser.title)
+        self.assertIn("To-Do lists", self.browser.title)
 
         # she notices the page title and header mentioned to-do lists
         header_text: str = self.browser.find_element(By.TAG_NAME, "h1").text
