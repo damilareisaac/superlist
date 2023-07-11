@@ -16,7 +16,7 @@ class CustomLiveServerTestCase(LiveServerTestCase):
         self.browser.quit()
 
     def check_row_in_list_table(self, row_text):
-        table = self.browser.find_element(By.ID, "to-do_items-list-table")
+        table = self.browser.find_element(By.ID, "to-do_items_list_table")
         rows = table.find_elements(By.TAG_NAME, "tr")
         self.assertIn(row_text, [row.text for row in rows])
 
@@ -69,7 +69,7 @@ class TestFunctionalityTestCase(CustomLiveServerTestCase):
 
         # she notices the page title and header mentioned to-do lists
         header_text: str = self.browser.find_element(By.TAG_NAME, "h1").text
-        self.assertIn("Start a To-Do list", header_text)
+        self.assertIn("Start a new To-Do list", header_text)
 
         # She is invited to enter a to-do item straight away
         to_do_input_box = self.browser.find_element(By.ID, "todo_input_text")
