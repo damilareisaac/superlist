@@ -9,7 +9,7 @@ class SmokeTestCase(FunctionalTestCase):
         self.browser.set_window_size(1024, 768)
 
         self.send_to_do_item("testing")
-        self.wait_for_low_in_list_table("1. testing")
+        self.wait_for(lambda: self.check_row_in_list_table("1. testing"))
 
         inputbox = self.browser.find_element(By.ID, "todo_input_text")
         self.assertAlmostEqual(

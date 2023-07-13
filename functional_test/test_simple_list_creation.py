@@ -9,7 +9,7 @@ class TestSimpleListCreationTestCase(FunctionalTestCase):
 
         self.browser.get(self.live_server_url)
         self.send_to_do_item("Buy peacock feathers")
-        self.wait_for_low_in_list_table("1. Buy peacock feathers")
+        self.wait_for(lambda: self.check_row_in_list_table("1. Buy peacock feathers"))
 
         # She notices that her list has a unique URL
 
@@ -31,7 +31,7 @@ class TestSimpleListCreationTestCase(FunctionalTestCase):
         # Francis started a new list by entering an item
 
         self.send_to_do_item("Buy milk")
-        self.wait_for_low_in_list_table("1. Buy milk")
+        self.wait_for(lambda: self.check_row_in_list_table("1. Buy milk"))
 
         francis_url = self.browser.current_url
         self.assertRegex(francis_url, "lists/.+")

@@ -1,5 +1,7 @@
+from unittest import skip
 from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
+from django.utils.html import escape
 from django.urls import ResolverMatch, resolve
 from lists.views import home_page
 from lists.models import Item, List
@@ -82,7 +84,7 @@ class TestListView(TestCase):
 
     def test_redirects_after_post(self):
         response: HttpResponse = self.client.post(
-            "/lists/new", data={"text": "New Item"}
+            "/lists/new", data={"todo_input_text": "New Item"}
         )
         new_list = List.objects.first()
         self.assertRedirects(response, f"/lists/{new_list.id}/")
@@ -116,3 +118,10 @@ class TestListView(TestCase):
         current_list: List = List.objects.create()
         response = self.client.post(f"/lists/{current_list.id}/")
         self.assertEqual(response.context.get("list"), current_list)
+
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        response = self.client.post("/lists/new", data={"item_text": ""})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "home.html")
+        expected_error = escape("You can't have an empty list item")
+        self.assertContains(response, expected_error)
