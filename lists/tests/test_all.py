@@ -2,7 +2,6 @@ from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
 from django.urls import ResolverMatch, resolve
 from lists.views import home_page
-
 from lists.models import Item, List
 
 
