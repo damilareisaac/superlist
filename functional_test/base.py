@@ -16,8 +16,14 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         self.browser.quit()
 
     def check_row_in_list_table(self, row_text) -> None:
-        table = self.browser.find_element(By.ID, "to-do_items_list_table")
-        rows = table.find_elements(By.TAG_NAME, "tr")
+        table = self.browser.find_element(
+            By.ID,
+            "to-do_items_list_table",
+        )
+        rows = table.find_elements(
+            By.TAG_NAME,
+            "tr",
+        )
         self.assertIn(row_text, [row.text for row in rows])
 
     def send_to_do_item(self, item_text) -> None:

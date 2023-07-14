@@ -68,3 +68,18 @@ class TestListItemValidation(FunctionalTestCase):
 
         self.send_to_do_item("Make tea")
         self.wait_for(lambda: self.check_row_in_list_table("2. Make tea"))
+
+    def test_cannot_add_duplicate_items(self):
+        self.browser.get(self.live_server_url)
+        self.send_to_do_item("Buy wellies")
+        self.wait_for(lambda: self.check_row_in_list_table("1. Buy wellies"))
+
+        # She accidentally tries to enter a duplicate item
+        self.send_to_do_item("Buy wellies")
+        # She sees a helpful error message
+        self.wait_for(
+            lambda: self.assertEqual(
+                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text,
+                "You've already got this in your list",
+            )
+        )
