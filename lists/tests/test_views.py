@@ -1,3 +1,4 @@
+import time
 from unittest import skip
 from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
@@ -94,7 +95,7 @@ class TestListView(TestCase):
         current_list = List.objects.create()
 
         self.client.post(
-            f"/lists/{current_list.id}/add_item",
+            f"/lists/{current_list.id}/",
             data={"todo_input_text": "a new item for current list"},
         )
 
@@ -108,7 +109,7 @@ class TestListView(TestCase):
         current_list: List = List.objects.create()
 
         response = self.client.post(
-            f"/lists/{current_list.id}/add_item",
+            f"/lists/{current_list.id}/",
             data={"todo_input_text": "a new item for current list"},
         )
         self.assertRedirects(response, f"/lists/{current_list.id}/")
@@ -117,7 +118,7 @@ class TestListView(TestCase):
         _: List = List.objects.create()
         current_list: List = List.objects.create()
         response = self.client.post(f"/lists/{current_list.id}/")
-        self.assertEqual(response.context.get("list"), current_list)
+        self.assertRedirects(response, f"/lists/{current_list.id}/")
 
     def test_validation_errors_are_sent_back_to_home_page_template(self):
         response = self.client.post("/lists/new", data={"item_text": ""})
