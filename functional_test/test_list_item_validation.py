@@ -17,10 +17,7 @@ class TestListItemValidation(FunctionalTestCase):
         self.assertIn("Start a new To-Do list", header_text)
 
         # She is invited to enter a to-do item straight away
-        to_do_input_box = self.browser.find_element(
-            By.ID,
-            "todo_input_text",
-        )
+        to_do_input_box = self.get_item_input_box()
         self.assertEqual(
             to_do_input_box.get_attribute("placeholder"),
             "Enter a to-do item",
@@ -56,10 +53,7 @@ class TestListItemValidation(FunctionalTestCase):
         # that list items cannot be blank
 
         self.wait_for(
-            lambda: self.assertEqual(
-                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text,
-                "You can't have an empty list item",
-            )
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "#id_text:invalid")
         )
 
         # She tries again with some text for the item, which now works
@@ -69,10 +63,8 @@ class TestListItemValidation(FunctionalTestCase):
         # Perversely, she now decides to submit a second blank list
         self.send_to_do_item("")
         self.wait_for(
-            lambda: self.assertEqual(
-                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text,
-                "You can't have an empty list item",
-            )
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "#id_text:invalid")
         )
+
         self.send_to_do_item("Make tea")
         self.wait_for(lambda: self.check_row_in_list_table("2. Make tea"))
