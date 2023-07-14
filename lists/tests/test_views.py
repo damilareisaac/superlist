@@ -78,9 +78,9 @@ class TestListView(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], f"/lists/{list_.id}/")
 
-    # def test_not_saving_empty_item(self):
-    #     self.client.post("/lists/new")
-    #     self.assertEqual(Item.objects.count(), 0)
+    def test_not_saving_empty_item(self):
+        self.client.post("/lists/new")
+        self.assertEqual(Item.objects.count(), 0)
 
     def test_redirects_after_post(self):
         response: HttpResponse = self.client.post(

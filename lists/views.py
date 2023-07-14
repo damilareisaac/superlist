@@ -23,7 +23,9 @@ def new_list(request) -> HttpResponse:
     item = Item.objects.create(text=text_input, list=list_)
     try:
         item.full_clean()
+        item.save()
     except ValidationError:
+        list_.delete()
         error = escape("You can't have an empty list item")
         context = dict(error=error)
         return render(request, "home.html", context)

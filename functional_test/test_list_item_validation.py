@@ -63,6 +63,7 @@ class TestListItemValidation(FunctionalTestCase):
         )
 
         # She tries again with some text for the item, which now works
+        self.send_to_do_item("Buy milk")
         self.wait_for(lambda: self.check_row_in_list_table("1. Buy milk"))
 
         # Perversely, she now decides to submit a second blank list
@@ -73,7 +74,7 @@ class TestListItemValidation(FunctionalTestCase):
                 "You can't have an empty list item",
             )
         )
-
+        self.send_to_do_item("Make tea")
         self.wait_for(lambda: self.check_row_in_list_table("2. Make tea"))
 
         self.fail("finish this test!")
