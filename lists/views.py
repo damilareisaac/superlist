@@ -19,7 +19,7 @@ def view_list(request: HttpRequest, list_id: int) -> HttpResponse:
             item = Item(text=text_input, list=list_)
             item.full_clean()
             item.save()
-            return redirect(f"/lists/{list_.id}/")
+            return redirect(list_)
         except ValidationError:
             error = escape("You can't have an empty list item")
     context = dict(list=list_, error=error)
@@ -38,4 +38,4 @@ def new_list(request) -> HttpResponse:
         error = escape("You can't have an empty list item")
         context = dict(error=error)
         return render(request, "home.html", context)
-    return redirect(f"/lists/{list_.id}/")
+    return redirect(list_)
