@@ -76,5 +76,3 @@ class TestListItemValidation(FunctionalTestCase):
         )
         self.send_to_do_item("Make tea")
         self.wait_for(lambda: self.check_row_in_list_table("2. Make tea"))
-
-        self.fail("finish this test!")

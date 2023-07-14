@@ -12,11 +12,17 @@ def home_page(request) -> HttpResponse:
 
 def view_list(request: HttpRequest, list_id: int) -> HttpResponse:
     list_ = List.objects.get(id=list_id)
+    error = None
     if request.method == "POST":
-        text_input = request.POST.get("todo_input_text", "")
-        Item.objects.create(text=text_input, list=list_)
-        return redirect(f"/lists/{list_.id}/")
-    context = dict(list=list_)
+        try:
+            text_input = request.POST.get("todo_input_text", "")
+            item = Item(text=text_input, list=list_)
+            item.full_clean()
+            item.save()
+            return redirect(f"/lists/{list_.id}/")
+        except ValidationError:
+            error = escape("You can't have an empty list item")
+    context = dict(list=list_, error=error)
     return render(request, "list.html", context)
 
 
