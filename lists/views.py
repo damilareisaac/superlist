@@ -2,12 +2,14 @@ from django.http import HttpRequest, HttpResponse
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.utils.html import escape
+from lists.forms import ItemForm
 
 from lists.models import Item, List
 
 
 def home_page(request) -> HttpResponse:
-    return render(request, "home.html")
+    context = {"form": ItemForm()}
+    return render(request, "home.html", context)
 
 
 def view_list(request: HttpRequest, list_id: int) -> HttpResponse:

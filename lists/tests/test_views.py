@@ -4,6 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
 from django.utils.html import escape
 from django.urls import ResolverMatch, resolve
+from lists.forms import ItemForm
 from lists.views import home_page
 from lists.models import Item, List
 
@@ -39,6 +40,10 @@ class TestListView(TestCase):
             f"/lists/{list_.id}/",
         )
         self.assertTemplateUsed(response, "list.html")
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get("/")
+        self.assertIsInstance(response.context.get("form"), ItemForm)
 
     def test_display_all_items(self):
         list_: List = List.objects.create()
