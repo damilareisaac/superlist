@@ -1,6 +1,7 @@
 from unittest import skip
 from selenium.webdriver.common.by import By
 from functional_test.base import FunctionalTestCase
+from lists.forms import DUPLICATE_ITEM_ERROR
 
 
 class TestListItemValidation(FunctionalTestCase):
@@ -80,6 +81,6 @@ class TestListItemValidation(FunctionalTestCase):
         self.wait_for(
             lambda: self.assertEqual(
                 self.browser.find_element(By.CSS_SELECTOR, ".has-error").text,
-                "You've already got this in your list",
+                DUPLICATE_ITEM_ERROR,
             )
         )
